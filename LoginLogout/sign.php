@@ -1,5 +1,8 @@
 <?php
 
+$success = 0;
+$user = 0;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    include 'connect.php';
 
@@ -24,7 +27,7 @@ $result = mysqli_query($con, $sql);
 if ($result) {
         $num = mysqli_num_rows($result);
         if ($num > 0 ) {
-            echo "Username already taken";
+      $user = 1;
         }
         else {
             $sql = "insert into registration (username, password) values('$username', '$password')";
@@ -32,7 +35,7 @@ if ($result) {
             $result = mysqli_query($con, $sql);
 
             if ($result) {
-                echo "Data inserted successfully";
+        $success = 1;
             }
             else {
                 die(mysqli_error($con));
@@ -74,4 +77,21 @@ if ($result) {
 </form>
 </div>
   </body>
+
+  <?php 
+
+  if ($user) {
+    echo '<div class="alert alert-danger text-center" role="alert">
+    <strong>Username already taken. Please choose another.</strong>
+  </div>';
+  }
+
+  if ($success) {
+
+    echo "<div class='alert alert-success text-center' role='alert'>
+    You are now registered with the username: $username 
+    </div>";
+  }
+
+  ?>
 </html>
